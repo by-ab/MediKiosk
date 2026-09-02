@@ -126,7 +126,7 @@ export default function LoginPage() {
             <div className="flex items-center space-x-2">
               <span className="font-bold text-xl text-slate-900 tracking-tight">MediKiosk</span>
               <span className="text-[10px] bg-teal-100 text-teal-800 font-bold px-2 py-0.5 rounded-md uppercase">
-                Hackathon Demo
+                Patient Portal
               </span>
             </div>
             <p className="text-xs text-slate-500">Autonomous Clinical Triage &amp; Intake</p>
@@ -183,11 +183,11 @@ export default function LoginPage() {
             <div className="bg-gradient-to-r from-teal-700 to-teal-900 text-white p-6 sm:p-8">
               <div className="inline-flex items-center space-x-2 bg-white/10 px-3 py-1 rounded-full text-teal-200 text-xs font-medium mb-3">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>Simulated Patient Check-In</span>
+                <span>Patient Check-In</span>
               </div>
               <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Patient Check-In</h1>
               <p className="text-teal-100 text-xs sm:text-sm mt-1">
-                Sign in with your simulated ABHA ID or register as a walk-in patient.
+                Sign in with your ABHA ID or register as a walk-in patient.
               </p>
             </div>
 
@@ -228,13 +228,13 @@ export default function LoginPage() {
 
             {/* Form Body */}
             <div className="p-6 sm:p-8 space-y-6">
-              {/* Simulated Auth Explanation Notice */}
+              {/* Authentication Provider Notice */}
               <div className="bg-teal-50/80 border border-teal-200 rounded-2xl p-3.5 flex items-start space-x-3 text-xs text-teal-950">
                 <Info className="w-4 h-4 text-teal-600 shrink-0 mt-0.5" />
                 <div>
-                  <span className="font-bold">Simulated Authentication Layer: </span>
+                  <span className="font-bold">Authentication Provider: </span>
                   <span className="text-teal-900">
-                    This is an isolated demo authentication layer (no real government calls). Use the one-click demo presets below for testing.
+                    Simulated ABHA authentication layer. Use the quick sample profiles below for testing.
                   </span>
                 </div>
               </div>
@@ -269,10 +269,10 @@ export default function LoginPage() {
                     <div>
                       <div className="flex items-center justify-between mb-1.5">
                         <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
-                          Simulated OTP Code
+                          OTP Verification Code
                         </label>
                         <span className="text-[11px] text-teal-700 font-mono font-bold bg-teal-50 px-2 py-0.5 rounded">
-                          Demo OTP: 123456
+                          Test OTP: 123456
                         </span>
                       </div>
                       <div className="relative">
@@ -288,10 +288,10 @@ export default function LoginPage() {
                       </div>
                     </div>
 
-                    {/* Quick Demo Pre-fills */}
+                    {/* Quick Profiles */}
                     <div className="pt-2">
                       <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                        Quick Demo Profiles:
+                        Sample Profiles:
                       </span>
                       <div className="flex flex-wrap gap-2">
                         <button
@@ -370,10 +370,10 @@ export default function LoginPage() {
                       </div>
                     </div>
 
-                    {/* Quick Demo Pre-fill for Walk-in */}
+                    {/* Sample Walk-in Profile */}
                     <div className="pt-2">
                       <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                        Quick Demo Pre-fill:
+                        Sample Walk-in Profile:
                       </span>
                       <button
                         type="button"
@@ -411,7 +411,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="max-w-5xl w-full mx-auto text-center text-xs text-slate-400 py-4">
-        MediKiosk • AI Patient Intake &amp; Triage • Built for Hackathon Demonstration
+        MediKiosk • Intelligent Patient Intake &amp; Clinical Triage System
       </footer>
     </div>
   );

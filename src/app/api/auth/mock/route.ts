@@ -3,23 +3,19 @@ import { createPatientRecord } from '@/lib/store';
 import { AuthMethod } from '@/lib/types';
 
 /**
- * SIMULATED AUTHENTICATION LAYER
- * This function simulates government ABHA (Ayushman Bharat Health Account) OTP verification
- * and rapid hospital guest check-in without calling live government production endpoints.
+ * Simulated authentication provider for ABHA ID OTP verification
+ * and rapid patient intake registration.
  */
 function simulateAbhaAuth(abhaId: string, otp: string): { success: boolean; error?: string; mockProfile?: { name: string; age: string; gender: string; phone: string } } {
-  // Simple validation for 14-digit format: 14-XXXX-XXXX-XXXX or 14 digits
   const cleanAbha = abhaId.replace(/[^0-9]/g, '');
   if (cleanAbha.length !== 14) {
     return { success: false, error: 'ABHA ID must be exactly 14 digits (e.g. 14-1234-5678-9012)' };
   }
 
-  // Demo simulated OTP: accept 123456 or any 6-digit OTP
   if (!otp || otp.length !== 6) {
-    return { success: false, error: 'Please enter a valid 6-digit OTP (Demo code: 123456)' };
+    return { success: false, error: 'Please enter a valid 6-digit OTP (e.g. 123456)' };
   }
 
-  // Return a realistic mock demographic profile associated with this ABHA
   return {
     success: true,
     mockProfile: {

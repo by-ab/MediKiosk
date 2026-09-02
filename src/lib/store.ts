@@ -17,7 +17,7 @@ globalThis.__medikiosk_token_counter__ = tokenCounter;
 function seedInitialData() {
   if (store.size > 0) return;
 
-  // Pre-seed Demo Patient 1: Pre-existing intake with low-confidence handwritten prescription
+  // Seed Record 1: Patient intake with handwritten prescription attachment
   const p1Token = 'TK-14';
   const p1: PatientRecord = {
     token: p1Token,
@@ -94,7 +94,7 @@ function seedInitialData() {
     updatedAt: new Date(Date.now() - 1000 * 60 * 10).toISOString(),
   };
 
-  // Pre-seed Demo Patient 2: High confidence printed lab report
+  // Seed Record 2: Patient intake with printed lab report attachment
   const p2Token = 'TK-18';
   const p2: PatientRecord = {
     token: p2Token,

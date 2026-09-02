@@ -18,7 +18,7 @@ const QUICK_RESPONSES = [
   'Worse when walking or bending',
   'No fever or nausea, just pain',
   'Pain level 6 out of 10',
-  'Chest pain and difficulty breathing', // Red flag demo chip
+  'Chest pain and difficulty breathing',
 ];
 
 export function SocratesChat({ token, patientName, initialMessages = [], onComplete }: SocratesChatProps) {

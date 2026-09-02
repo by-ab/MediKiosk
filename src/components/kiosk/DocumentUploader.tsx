@@ -132,20 +132,20 @@ export function DocumentUploader({ token, existingDocs = [], onComplete }: Docum
         </div>
       </div>
 
-      {/* Preset Demo Buttons for Quick Evaluation */}
+      {/* Sample Clinical Documents */}
       <div className="bg-slate-900 text-white rounded-2xl p-5 shadow-sm border border-slate-800">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center space-x-2">
             <Sparkles className="w-4 h-4 text-teal-400" />
-            <h3 className="text-sm font-bold text-slate-100">Quick Demo Presets</h3>
+            <h3 className="text-sm font-bold text-slate-100">Sample Clinical Documents</h3>
           </div>
           <span className="text-[10px] bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded">
-            Click to simulate OCR
+            Click to load sample
           </span>
         </div>
 
         <p className="text-xs text-slate-300 mb-4">
-          Test how Gemini distinguishes between clear printed reports (high confidence) vs ambiguous handwritten prescriptions (flagged for physician review):
+          Select a sample document to test optical analysis across printed laboratory reports and handwritten prescriptions:
         </p>
 
         <div className="grid sm:grid-cols-2 gap-3">

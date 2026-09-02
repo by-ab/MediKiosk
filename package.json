@@ -1,6 +1,7 @@
 {
   "name": "medikiosk",
   "version": "0.1.0",
+  "description": "Patient intake and clinical triage system with adaptive symptom inquiry, document digitization, and EMR integration.",
   "private": true,
   "scripts": {
     "dev": "next dev",

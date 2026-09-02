@@ -35,7 +35,7 @@ export const SAMPLE_DOC_PRESETS: SampleDocPreset[] = [
     category: 'handwritten',
     description: 'Cursive handwriting with partially illegible dosage notation.',
     confidenceExpected: 'low',
-    previewBadge: 'Low Confidence Demo',
+    previewBadge: 'Low Legibility (Flagged)',
     svgDataUrl: handwrittenRxSvg,
     simulatedExtraction: {
       documentType: 'Handwritten Prescription',
@@ -74,7 +74,7 @@ export const SAMPLE_DOC_PRESETS: SampleDocPreset[] = [
     category: 'printed',
     description: 'Crisp digital pathology lab report with clear tabular parameters.',
     confidenceExpected: 'high',
-    previewBadge: 'High Confidence Demo',
+    previewBadge: 'High Clarity (Printed)',
     svgDataUrl: printedReportSvg,
     simulatedExtraction: {
       documentType: 'Printed Pathology Lab Report',
