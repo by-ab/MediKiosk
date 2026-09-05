@@ -47,6 +47,9 @@ export async function POST(req: NextRequest) {
     let formattedAbhaId = abhaId;
 
     if (authMethod === 'abha') {
+      if (!name || !name.trim()) {
+        return NextResponse.json({ error: 'Full Name is required' }, { status: 400 });
+      }
       if (!abhaId) {
         return NextResponse.json({ error: 'ABHA ID is required' }, { status: 400 });
       }
@@ -56,8 +59,8 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: authResult.error }, { status: 400 });
       }
 
+      patientName = name.trim();
       if (authResult.mockProfile) {
-        patientName = name || authResult.mockProfile.name;
         patientPhone = phone || authResult.mockProfile.phone;
         patientAge = age || authResult.mockProfile.age;
         patientGender = gender || authResult.mockProfile.gender;

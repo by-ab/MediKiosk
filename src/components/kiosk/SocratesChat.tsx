@@ -11,16 +11,6 @@ interface SocratesChatProps {
   onComplete: () => void;
 }
 
-const QUICK_RESPONSES = [
-  'Severe throbbing pain on right side',
-  'Started suddenly yesterday morning',
-  'Mild dull ache for about 3 days',
-  'Worse when walking or bending',
-  'No fever or nausea, just pain',
-  'Pain level 6 out of 10',
-  'Chest pain and difficulty breathing',
-];
-
 export function SocratesChat({ token, patientName, initialMessages = [], onComplete }: SocratesChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>(initialMessages);
   const [input, setInput] = useState('');
@@ -47,7 +37,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
         {
           id: 'welcome-msg',
           role: 'assistant',
-          content: `Hello ${patientName || 'there'}! I am your MediKiosk clinical intake assistant. To help your doctor prepare for your visit, could you describe what main symptom or concern brings you in today?`,
+          content: `Hello ${patientName || 'there'}. I am your MediKiosk clinical intake assistant. To help your doctor prepare for your visit, could you describe what main symptom or health concern brings you in today?`,
           timestamp: new Date().toISOString(),
           socratesDimension: 'general',
         }
@@ -118,7 +108,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
         {
           id: `err-${Date.now()}`,
           role: 'assistant',
-          content: `Apologies, I encountered a temporary connection glitch (${errorMsg}). Please feel free to proceed or retry.`,
+          content: `I encountered a temporary connection issue (${errorMsg}). Please type your message again or continue.`,
           timestamp: new Date().toISOString(),
         }
       ]);
@@ -136,7 +126,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
   };
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div className="flex flex-col h-full bg-white rounded-2xl shadow-xs border border-slate-200 overflow-hidden">
       {/* Chat Top Banner */}
       <div className="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center space-x-2.5">
@@ -145,23 +135,23 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
           </div>
           <div>
             <h2 className="text-sm font-semibold text-slate-100 flex items-center space-x-1.5">
-              <span>Clinical Symptom Interview</span>
-              <span className="text-[10px] bg-teal-900/70 text-teal-300 font-mono px-1.5 py-0.5 rounded border border-teal-700/50">
+              <span>Symptom Intake Assessment</span>
+              <span className="text-[10px] bg-teal-950 text-teal-300 font-mono px-1.5 py-0.5 rounded border border-teal-800">
                 SOCRATES AI
               </span>
             </h2>
-            <p className="text-xs text-slate-400">Adaptive one-question-at-a-time clinical assessment</p>
+            <p className="text-xs text-slate-400">Structured pre-consultation clinical inquiry</p>
           </div>
         </div>
 
         {/* Turn counter */}
         <div className="text-right">
           <span className="text-xs text-slate-400 block font-mono">
-            {isCompleted ? 'Complete' : `Turn ${Math.min(turnCount + 1, 6)} of 6`}
+            {isCompleted ? 'Complete' : `Question ${Math.min(turnCount + 1, 6)} of 6`}
           </span>
           <div className="w-24 bg-slate-800 h-1.5 rounded-full overflow-hidden mt-1">
             <div
-              className={`h-full transition-all duration-300 ${redFlag.isRedFlag ? 'bg-red-500' : 'bg-teal-400'}`}
+              className={`h-full transition-all duration-300 ${redFlag.isRedFlag ? 'bg-red-500' : 'bg-teal-500'}`}
               style={{ width: `${Math.min(((turnCount + 1) / 6) * 100, 100)}%` }}
             />
           </div>
@@ -170,26 +160,26 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
 
       {/* Red Flag Alert Banner */}
       {redFlag.isRedFlag && (
-        <div className="bg-red-50 border-b-2 border-red-500 p-4 animate-in fade-in duration-300">
+        <div className="bg-red-50 border-b border-red-300 p-4">
           <div className="flex items-start space-x-3">
             <div className="p-2 bg-red-100 rounded-lg text-red-600 shrink-0 mt-0.5">
-              <AlertTriangle className="w-6 h-6 animate-bounce" />
+              <AlertTriangle className="w-5 h-5" />
             </div>
             <div className="flex-1">
               <div className="flex items-center space-x-2">
-                <span className="bg-red-600 text-white text-[10px] font-black uppercase px-2 py-0.5 rounded">
-                  RED FLAG ALERT
+                <span className="bg-red-600 text-white text-[10px] font-bold uppercase px-2 py-0.5 rounded">
+                  Clinical Alert
                 </span>
-                <h3 className="font-bold text-red-950 text-sm">Urgent Clinical Symptom Detected</h3>
+                <h3 className="font-bold text-red-950 text-sm">Immediate Triage Assessment Required</h3>
               </div>
-              <p className="text-xs text-red-800 mt-1 font-medium leading-relaxed">
+              <p className="text-xs text-red-800 mt-1 leading-relaxed">
                 {redFlag.reason}
               </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="mt-3">
                 <button
                   type="button"
                   onClick={onComplete}
-                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center space-x-1.5 shadow-sm"
+                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center space-x-1.5 shadow-xs"
                 >
                   <span>Proceed to Upload Documents &amp; Alert Doctor</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -209,7 +199,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
           return (
             <div
               key={msg.id}
-              className={`flex items-start gap-3 ${isAssistant ? 'justify-start' : 'justify-end'}`}
+              className={`flex items-start gap-2.5 ${isAssistant ? 'justify-start' : 'justify-end'}`}
             >
               {isAssistant && (
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-white shadow-xs ${isAlert ? 'bg-red-600' : 'bg-teal-600'}`}>
@@ -218,17 +208,17 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
               )}
 
               <div
-                className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-4 text-sm leading-relaxed shadow-xs ${
+                className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed shadow-xs ${
                   isAssistant
                     ? isAlert
                       ? 'bg-red-50 border border-red-200 text-red-950 rounded-tl-xs font-medium'
                       : 'bg-white border border-slate-200 text-slate-800 rounded-tl-xs'
-                    : 'bg-teal-700 text-white rounded-tr-xs shadow-teal-700/20'
+                    : 'bg-teal-600 text-white rounded-tr-xs'
                 }`}
               >
                 {/* SOCRATES Dimension pill if available */}
                 {isAssistant && msg.socratesDimension && (
-                  <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded-md mb-2">
+                  <span className="inline-block text-[10px] font-bold uppercase tracking-wider text-teal-700 bg-teal-50 border border-teal-200 px-2 py-0.5 rounded mb-2">
                     Focus: {msg.socratesDimension}
                   </span>
                 )}
@@ -255,11 +245,11 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
 
         {/* Loading typing bubble */}
         {isLoading && (
-          <div className="flex items-start gap-3 justify-start">
+          <div className="flex items-start gap-2.5 justify-start">
             <div className="w-8 h-8 rounded-full bg-teal-600 flex items-center justify-center shrink-0 text-white">
               <Bot className="w-4 h-4" />
             </div>
-            <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-xs p-4 shadow-xs flex items-center space-x-2">
+            <div className="bg-white border border-slate-200 rounded-2xl rounded-tl-xs p-3.5 shadow-xs flex items-center space-x-2">
               <Loader2 className="w-4 h-4 animate-spin text-teal-600" />
               <span className="text-xs text-slate-500 font-medium">Formulating clinical follow-up...</span>
             </div>
@@ -269,17 +259,17 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Completion Banner (when normal interview wraps up) */}
+      {/* Completion Banner */}
       {isCompleted && !redFlag.isRedFlag && (
         <div className="bg-teal-50 border-t border-teal-200 p-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <div className="flex items-center space-x-2 text-teal-900 text-xs font-semibold">
+          <div className="flex items-center space-x-2 text-teal-900 text-xs font-medium">
             <CheckCircle2 className="w-5 h-5 text-teal-600 shrink-0" />
-            <span>Symptom inquiry complete. Ready to proceed to document upload.</span>
+            <span>Symptom interview complete. You may now attach any relevant prescriptions or test reports.</span>
           </div>
           <button
             type="button"
             onClick={onComplete}
-            className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white text-xs font-bold px-5 py-2.5 rounded-xl transition-all shadow-sm flex items-center justify-center space-x-1.5 shrink-0"
+            className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 shrink-0"
           >
             <span>Next: Upload Documents</span>
             <ArrowRight className="w-4 h-4" />
@@ -287,28 +277,9 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
         </div>
       )}
 
-      {/* Quick Suggestions & Input Controls */}
+      {/* Input Controls */}
       {!isCompleted && (
-        <div className="p-3 sm:p-4 bg-white border-t border-slate-200 space-y-2.5">
-          {/* Quick reply chips */}
-          <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs no-scrollbar">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider shrink-0 mr-1">
-              Suggestions:
-            </span>
-            {QUICK_RESPONSES.map((chip, idx) => (
-              <button
-                key={idx}
-                type="button"
-                onClick={() => handleSendMessage(chip)}
-                disabled={isLoading}
-                className="whitespace-nowrap bg-slate-100 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-300 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-medium transition-colors disabled:opacity-50 shrink-0"
-              >
-                {chip.includes('Chest pain') ? '⚠️ ' + chip : chip}
-              </button>
-            ))}
-          </div>
-
-          {/* Chat text input */}
+        <div className="p-3 sm:p-4 bg-white border-t border-slate-200">
           <div className="flex items-center gap-2">
             <input
               ref={inputRef}
@@ -318,15 +289,15 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
               onKeyDown={handleKeyDown}
               disabled={isLoading}
               placeholder="Describe your symptoms in your own words..."
-              className="flex-1 bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-4 py-3 text-sm text-slate-900 transition-colors disabled:bg-slate-100"
+              className="flex-1 bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-4 py-2.5 text-sm text-slate-900 transition-colors disabled:bg-slate-100"
             />
             <button
               type="button"
               onClick={() => handleSendMessage()}
               disabled={!input.trim() || isLoading}
-              className="bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white p-3 rounded-xl transition-colors shrink-0 shadow-xs flex items-center justify-center"
+              className="bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 text-white p-2.5 rounded-xl transition-colors shrink-0 shadow-xs flex items-center justify-center"
             >
-              <Send className="w-5 h-5" />
+              <Send className="w-4 h-4" />
             </button>
           </div>
         </div>
@@ -334,3 +305,4 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
     </div>
   );
 }
+

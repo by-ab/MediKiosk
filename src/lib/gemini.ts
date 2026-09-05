@@ -2,9 +2,6 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ChatMessage, DigitizedDocument, ClinicalSummary, SocratesDimension } from './types';
 import { SAMPLE_DOC_PRESETS } from './sampleDocs';
 
-const apiKey = process.env.GEMINI_API_KEY || '';
-const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
-
 export const RED_FLAG_KEYWORDS = [
   'chest pain',
   'crushing pain',
@@ -52,6 +49,36 @@ const SOCRATES_DIMENSIONS: SocratesDimension[] = [
   'severity',
 ];
 
+// Prioritized model cascade for Gemini API
+const GEMINI_MODELS = ['gemini-3.6-flash', 'gemini-flash-latest', 'gemini-3.7-flash'];
+
+function getGenAI(): GoogleGenerativeAI | null {
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+  if (!apiKey) return null;
+  return new GoogleGenerativeAI(apiKey);
+}
+
+// Resilient generation with automatic model fallback
+async function generateWithGemini(
+  content: string | (string | { inlineData: { data: string; mimeType: string } })[]
+): Promise<string | null> {
+  const genAI = getGenAI();
+  if (!genAI) return null;
+
+  for (const modelName of GEMINI_MODELS) {
+    try {
+      const model = genAI.getGenerativeModel({ model: modelName });
+      const result = await model.generateContent(content as any);
+      const text = result.response.text();
+      if (text) return text.trim();
+    } catch (err: unknown) {
+      const errorMsg = err instanceof Error ? err.message : String(err);
+      console.warn(`[Gemini] Model ${modelName} call failed: ${errorMsg}. Trying next model...`);
+    }
+  }
+  return null;
+}
+
 export async function generateSocratesFollowUp(
   history: ChatMessage[],
   patientName: string = 'Patient'
@@ -77,7 +104,7 @@ export async function generateSocratesFollowUp(
     };
   }
 
-  // 2. Conclude after 6-8 exchanges
+  // 2. Conclude after 6 exchanges
   if (userTurnCount >= 6) {
     return {
       reply: `Thank you, ${patientName}. I have gathered a comprehensive overview of your symptoms. Let's proceed to the next step where you can upload any existing prescriptions or lab reports to attach to your doctor's intake file.`,
@@ -86,11 +113,8 @@ export async function generateSocratesFollowUp(
     };
   }
 
-  // 3. Try Gemini API if available
-  if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const prompt = `
+  // 3. Try Gemini API
+  const prompt = `
 You are MediKiosk, an empathetic AI clinical intake assistant in an outpatient hospital setting.
 You are interviewing a patient named "${patientName}" prior to their consultation with a physician.
 
@@ -117,19 +141,15 @@ ${history.map((m) => `${m.role.toUpperCase()}: ${m.content}`).join('\n')}
 Respond with the next assistant message.
 `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
-      const currentDim = SOCRATES_DIMENSIONS[userTurnCount % SOCRATES_DIMENSIONS.length];
-
-      return {
-        reply: text,
-        socratesDimension: currentDim,
-        isComplete: userTurnCount >= 6,
-        redFlagDetected: false,
-      };
-    } catch (err) {
-      console.warn('Gemini API call failed, using clinical fallback engine:', err);
-    }
+  const geminiReply = await generateWithGemini(prompt);
+  if (geminiReply) {
+    const currentDim = SOCRATES_DIMENSIONS[userTurnCount % SOCRATES_DIMENSIONS.length];
+    return {
+      reply: geminiReply,
+      socratesDimension: currentDim,
+      isComplete: userTurnCount >= 6,
+      redFlagDetected: false,
+    };
   }
 
   // 4. Clinical Fallback State Machine (Guarantees zero downtime)
@@ -202,11 +222,9 @@ export async function digitizeDocument(params: {
     }
   }
 
-  // If Gemini API is available and image provided
-  if (genAI && params.imageBase64 && params.mimeType) {
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const prompt = `
+  // If image provided, try Gemini Vision
+  if (params.imageBase64 && params.mimeType) {
+    const prompt = `
 You are a specialized Medical Document Digitization OCR engine for MediKiosk.
 Analyze this medical document (prescription, diagnostic report, discharge summary, or handwritten doctor's note).
 
@@ -241,34 +259,36 @@ Return a STRICT JSON object in this exact schema (no markdown fences, pure JSON)
 }
 `;
 
-      const cleanBase64 = params.imageBase64.replace(/^data:image\/[a-z]+;base64,/, '');
-      const result = await model.generateContent([
-        prompt,
-        {
-          inlineData: {
-            data: cleanBase64,
-            mimeType: params.mimeType,
-          },
+    const cleanBase64 = params.imageBase64.replace(/^data:image\/[a-z]+;base64,/, '');
+    const geminiVisionText = await generateWithGemini([
+      prompt,
+      {
+        inlineData: {
+          data: cleanBase64,
+          mimeType: params.mimeType,
         },
-      ]);
+      },
+    ]);
 
-      const text = result.response.text().trim();
-      const cleanedJson = text.replace(/```json/g, '').replace(/```/g, '').trim();
-      const parsed = JSON.parse(cleanedJson);
+    if (geminiVisionText) {
+      try {
+        const cleanedJson = geminiVisionText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const parsed = JSON.parse(cleanedJson);
 
-      return {
-        filename: params.filename || 'uploaded_document.jpg',
-        documentType: parsed.documentType || 'Medical Document',
-        date: parsed.date || new Date().toISOString().slice(0, 10),
-        medications: parsed.medications || [],
-        diagnosis: parsed.diagnosis || [],
-        confidenceAssessment: parsed.confidenceAssessment || 'medium',
-        confidenceReason: parsed.confidenceReason || 'Analyzed via Gemini Vision model.',
-        flaggedForVerification: Boolean(parsed.flaggedForVerification || parsed.confidenceAssessment === 'low'),
-        imageUrl: params.imageBase64,
-      };
-    } catch (err) {
-      console.warn('Gemini vision digitization fallback triggered:', err);
+        return {
+          filename: params.filename || 'uploaded_document.jpg',
+          documentType: parsed.documentType || 'Medical Document',
+          date: parsed.date || new Date().toISOString().slice(0, 10),
+          medications: parsed.medications || [],
+          diagnosis: parsed.diagnosis || [],
+          confidenceAssessment: parsed.confidenceAssessment || 'medium',
+          confidenceReason: parsed.confidenceReason || 'Analyzed via Gemini Vision model.',
+          flaggedForVerification: Boolean(parsed.flaggedForVerification || parsed.confidenceAssessment === 'low'),
+          imageUrl: params.imageBase64,
+        };
+      } catch (err) {
+        console.warn('[Gemini Vision] JSON parse error, falling back:', err);
+      }
     }
   }
 
@@ -323,10 +343,7 @@ export async function generateClinicalSummary(
   Diagnosis Mentioned: ${d.diagnosis.join(', ') || 'None'}
 `).join('\n');
 
-  if (genAI) {
-    try {
-      const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-      const prompt = `
+  const prompt = `
 You are an expert Clinical Scribe AI assisting an emergency/outpatient physician.
 Synthesize the patient intake conversation and digitized documents into a structured, professional clinical summary.
 
@@ -362,9 +379,10 @@ Respond with STRICT JSON only:
 }
 `;
 
-      const result = await model.generateContent(prompt);
-      const text = result.response.text().trim();
-      const cleaned = text.replace(/```json/g, '').replace(/```/g, '').trim();
+  const geminiSummaryText = await generateWithGemini(prompt);
+  if (geminiSummaryText) {
+    try {
+      const cleaned = geminiSummaryText.replace(/```json/g, '').replace(/```/g, '').trim();
       const parsed = JSON.parse(cleaned);
 
       const flags: string[] = parsed.flags || [];
@@ -387,7 +405,7 @@ Respond with STRICT JSON only:
         generatedAt: new Date().toISOString(),
       };
     } catch (err) {
-      console.warn('Gemini summary generation fallback:', err);
+      console.warn('[Gemini Summary] JSON parse error, falling back:', err);
     }
   }
 
@@ -413,3 +431,4 @@ Respond with STRICT JSON only:
     generatedAt: new Date().toISOString(),
   };
 }
+

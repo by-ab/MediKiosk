@@ -5,17 +5,11 @@ import Link from 'next/link';
 import {
   FileCheck2,
   AlertTriangle,
-  Stethoscope,
   Clock,
-  User,
-  ShieldCheck,
-  Sparkles,
-  Loader2,
   Printer,
   RotateCcw,
   CheckCircle2,
-  Pill,
-  Heart
+  Loader2
 } from 'lucide-react';
 import { ClinicalSummary, PatientInfo, DigitizedDocument } from '@/lib/types';
 
@@ -75,40 +69,36 @@ export function ClinicalSummaryView({
   return (
     <div className="space-y-6">
       {/* Patient Queue Token & Status Card */}
-      <div className="bg-gradient-to-r from-teal-800 to-slate-900 text-white rounded-3xl p-6 sm:p-8 shadow-md relative overflow-hidden">
-        {/* Subtle decorative background circles */}
-        <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-teal-500/10 rounded-full blur-2xl pointer-events-none" />
-        <div className="absolute right-20 -top-10 w-32 h-32 bg-teal-400/10 rounded-full blur-xl pointer-events-none" />
-
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 relative z-10">
+      <div className="bg-slate-900 text-white rounded-2xl p-6 sm:p-7 border border-slate-800 shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
           <div>
-            <div className="inline-flex items-center space-x-2 bg-teal-500/20 border border-teal-400/30 px-3 py-1 rounded-full text-teal-300 text-xs font-semibold mb-3">
+            <div className="inline-flex items-center space-x-1.5 bg-teal-950/80 border border-teal-700/50 px-2.5 py-0.5 rounded text-teal-300 text-xs font-semibold mb-2.5">
               <CheckCircle2 className="w-3.5 h-3.5 text-teal-400" />
               <span>Intake Complete • Queued for Doctor</span>
             </div>
 
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            <h1 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
               {patientInfo.name || 'Patient'}
             </h1>
-            <p className="text-slate-300 text-xs sm:text-sm mt-1">
+            <p className="text-slate-400 text-xs sm:text-sm mt-1">
               {patientInfo.abhaId ? `ABHA: ${patientInfo.abhaId}` : `Phone: ${patientInfo.phone}`} • {patientInfo.gender || 'Not specified'}, {patientInfo.age || '--'} yrs
             </p>
 
-            <div className="mt-4 flex items-center space-x-2 text-teal-200 text-xs bg-black/20 backdrop-blur-xs w-fit px-3 py-1.5 rounded-lg">
-              <Clock className="w-3.5 h-3.5 text-teal-400 animate-spin" />
+            <div className="mt-3.5 flex items-center space-x-2 text-teal-300 text-xs bg-slate-800/80 w-fit px-3 py-1.5 rounded-lg border border-slate-700/50">
+              <Clock className="w-3.5 h-3.5 text-teal-400" />
               <span>Waiting to be called by physician</span>
             </div>
           </div>
 
           {/* Big Token Badge */}
-          <div className="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 sm:p-5 text-center min-w-[140px] shadow-inner">
-            <span className="text-[11px] uppercase font-bold tracking-widest text-teal-300 block">
+          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 sm:p-5 text-center min-w-[140px]">
+            <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
               Queue Token
             </span>
-            <span className="text-3xl sm:text-4xl font-black text-white font-mono block my-1">
+            <span className="text-3xl sm:text-4xl font-extrabold text-teal-400 font-mono block my-1">
               #{tokenNumber || token}
             </span>
-            <span className="text-[10px] bg-teal-400/30 text-teal-100 px-2 py-0.5 rounded font-mono">
+            <span className="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded font-mono">
               {token}
             </span>
           </div>
@@ -116,22 +106,22 @@ export function ClinicalSummaryView({
       </div>
 
       {/* Editable Draft Notice Banner */}
-      <div className="bg-amber-50 border border-amber-300 rounded-2xl p-4 flex items-start space-x-3 text-amber-950 text-xs">
-        <AlertTriangle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+      <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start space-x-3 text-amber-950 text-xs">
+        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
         <div className="leading-relaxed">
-          <span className="font-bold">Editable Draft — Pending Physician Review: </span>
+          <span className="font-semibold">Clinical Intake Summary Draft: </span>
           <span>
-            This document is an AI-assisted structured clinical draft generated from your kiosk answers and uploaded documents. It is transmitted directly to your physician's EMR console for verification, edits, and clinical confirmation.
+            This structured summary has been transmitted directly to your physician's station. The doctor will review, verify, and confirm these details during your consultation.
           </span>
         </div>
       </div>
 
       {/* Low Confidence Document Warning (Carried Through) */}
       {summary?.flags && summary.flags.length > 0 && (
-        <div className="bg-red-50/70 border border-red-200 rounded-2xl p-4 space-y-2">
-          <div className="flex items-center space-x-2 text-red-900 font-bold text-xs">
+        <div className="bg-red-50/80 border border-red-200 rounded-xl p-4 space-y-2">
+          <div className="flex items-center space-x-2 text-red-900 font-semibold text-xs">
             <AlertTriangle className="w-4 h-4 text-red-600" />
-            <span>Clinical &amp; Handwriting Verification Flags:</span>
+            <span>Clinical Verification Notices:</span>
           </div>
           <ul className="space-y-1 pl-6 list-disc text-xs text-red-800">
             {summary.flags.map((flag, idx) => (
@@ -143,11 +133,11 @@ export function ClinicalSummaryView({
 
       {/* Loading Skeleton */}
       {isLoading && (
-        <div className="bg-white rounded-3xl p-8 border border-slate-200 shadow-xs text-center space-y-4">
-          <div className="inline-flex p-3 rounded-full bg-teal-50 text-teal-600 animate-pulse">
-            <Loader2 className="w-8 h-8 animate-spin" />
+        <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-xs text-center space-y-3">
+          <div className="inline-flex p-3 rounded-full bg-teal-50 text-teal-600">
+            <Loader2 className="w-6 h-6 animate-spin" />
           </div>
-          <h3 className="font-bold text-slate-800 text-base">Synthesizing 6-Part Clinical Summary...</h3>
+          <h3 className="font-semibold text-slate-800 text-sm">Synthesizing 6-Part Clinical Summary...</h3>
           <p className="text-xs text-slate-500 max-w-md mx-auto">
             Structuring chief complaint, HPI, past history, and medications for physician review.
           </p>
@@ -156,14 +146,14 @@ export function ClinicalSummaryView({
 
       {/* Structured 6-Section Clinical Summary Card */}
       {summary && !isLoading && (
-        <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6 print:border-none print:shadow-none">
-          <div className="flex items-center justify-between pb-4 border-b border-slate-200">
+        <div className="bg-white rounded-2xl p-6 sm:p-7 border border-slate-200 shadow-xs space-y-5 print:border-none print:shadow-none">
+          <div className="flex items-center justify-between pb-3.5 border-b border-slate-200">
             <div className="flex items-center space-x-2.5">
               <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center">
                 <FileCheck2 className="w-4 h-4" />
               </div>
               <div>
-                <h2 className="font-bold text-slate-900 text-base">Clinical Intake Summary (Draft)</h2>
+                <h2 className="font-bold text-slate-900 text-sm sm:text-base">Clinical Intake Summary (Draft)</h2>
                 <p className="text-xs text-slate-400">Generated at {new Date(summary.generatedAt).toLocaleTimeString()}</p>
               </div>
             </div>
@@ -174,15 +164,15 @@ export function ClinicalSummaryView({
               className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors print:hidden"
             >
               <Printer className="w-3.5 h-3.5" />
-              <span>Print</span>
+              <span>Print Summary</span>
             </button>
           </div>
 
           {/* The Exact 6 Required Sections */}
-          <div className="grid gap-5">
+          <div className="grid gap-4">
             {/* 1. Chief Complaint */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 1. Chief Complaint
               </span>
               <p className="text-sm font-semibold text-slate-900 leading-relaxed">
@@ -191,8 +181,8 @@ export function ClinicalSummaryView({
             </div>
 
             {/* 2. History of Present Illness (HPI) */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 2. History of Present Illness (HPI)
               </span>
               <p className="text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
@@ -201,8 +191,8 @@ export function ClinicalSummaryView({
             </div>
 
             {/* 3. Past Medical History */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 3. Past Medical History
               </span>
               <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
@@ -211,8 +201,8 @@ export function ClinicalSummaryView({
             </div>
 
             {/* 4. Drug & Allergy History */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 4. Drug &amp; Allergy History
               </span>
               <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
@@ -221,8 +211,8 @@ export function ClinicalSummaryView({
             </div>
 
             {/* 5. Family History */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 5. Family History
               </span>
               <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
@@ -231,8 +221,8 @@ export function ClinicalSummaryView({
             </div>
 
             {/* 6. Review of Systems */}
-            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-200/80">
-              <span className="text-[11px] font-black text-teal-800 uppercase tracking-wider block mb-1">
+            <div className="bg-slate-50 rounded-xl p-4 border border-slate-200">
+              <span className="text-[10px] font-bold text-teal-700 uppercase tracking-wider block mb-1">
                 6. Review of Systems (ROS)
               </span>
               <p className="text-xs sm:text-sm text-slate-800 leading-relaxed">
@@ -243,34 +233,21 @@ export function ClinicalSummaryView({
         </div>
       )}
 
-      {/* Action Footer & Doctor Console Link */}
-      <div className="bg-white rounded-2xl p-5 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
-        <div className="flex items-center space-x-3 text-xs text-slate-600">
-          <Stethoscope className="w-5 h-5 text-teal-600 shrink-0" />
-          <span>
-            Doctor will see this summary automatically when your token <strong className="text-slate-900 font-mono">#{tokenNumber || token}</strong> is called.
-          </span>
+      {/* Action Footer */}
+      <div className="bg-white rounded-xl p-4 border border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 shadow-xs">
+        <div className="text-xs text-slate-600 text-center sm:text-left">
+          Please proceed to the waiting area. Your token <strong className="text-slate-900 font-mono">#{tokenNumber || token}</strong> will be called by the consultation desk.
         </div>
 
-        <div className="flex items-center space-x-3 w-full sm:w-auto">
-          <Link
-            href="/doctor"
-            target="_blank"
-            className="flex-1 sm:flex-none bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold px-5 py-3 rounded-xl transition-colors text-center shadow-xs flex items-center justify-center space-x-2"
-          >
-            <Stethoscope className="w-4 h-4 text-teal-400" />
-            <span>Open Doctor Console</span>
-          </Link>
-
-          <Link
-            href="/"
-            className="flex-1 sm:flex-none bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold px-4 py-3 rounded-xl transition-colors text-center flex items-center justify-center space-x-1.5"
-          >
-            <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
-            <span>New Intake</span>
-          </Link>
-        </div>
+        <Link
+          href="/"
+          className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors text-center flex items-center justify-center space-x-1.5"
+        >
+          <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
+          <span>New Check-In</span>
+        </Link>
       </div>
     </div>
   );
 }
+

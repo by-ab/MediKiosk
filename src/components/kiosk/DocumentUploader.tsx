@@ -339,14 +339,14 @@ export function DocumentUploader({ token, existingDocs = [], onComplete }: Docum
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200">
         <p className="text-xs text-slate-500">
           {documents.length === 0
-            ? 'You can skip this step if you have no previous prescriptions or reports.'
-            : `${documents.length} document(s) will be attached to your physician's intake file.`}
+            ? 'You can proceed directly if you do not have documents to attach.'
+            : `${documents.length} document(s) attached to your intake file.`}
         </p>
 
         <button
           type="button"
           onClick={onComplete}
-          className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-bold text-sm px-6 py-3 rounded-xl transition-all shadow-sm flex items-center justify-center space-x-2"
+          className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2"
         >
           <span>Generate Clinical Summary</span>
           <ArrowRight className="w-4 h-4" />
@@ -355,3 +355,4 @@ export function DocumentUploader({ token, existingDocs = [], onComplete }: Docum
     </div>
   );
 }
+
