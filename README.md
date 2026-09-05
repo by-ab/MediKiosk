@@ -1,4 +1,5 @@
 # MediKiosk
+> **Independent project, not affiliated with the Government of India, ABDM, or the Ministry of AYUSH.** This is a personal/academic technical demonstration exploring how such a system could integrate with India's existing digital health infrastructure — it is not an official product, and none of the government systems referenced (ABHA, ABDM, DPDP compliance) are actually connected; see "What's Simulated" below.
 
 An intelligent outpatient intake and clinical triage system that streamlines patient registration, conducts structured symptom interviews using the clinical SOCRATES framework, digitizes medical records with handwriting confidence scoring, and automatically feeds synthesized summaries into a physician's EMR console.
 
