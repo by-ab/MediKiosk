@@ -12,7 +12,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Token and message are required' }, { status: 400 });
     }
 
-    const record = getPatientRecord(token);
+    const record = await getPatientRecord(token);
     if (!record) {
       return NextResponse.json({ error: 'Patient session not found for token: ' + token }, { status: 404 });
     }
@@ -24,10 +24,10 @@ export async function POST(req: NextRequest) {
       content: message.trim(),
       timestamp: new Date().toISOString(),
     };
-    addMessageToRecord(token, userMsg);
+    await addMessageToRecord(token, userMsg);
 
     // 2. Query Gemini / SOCRATES engine
-    const currentRecord = getPatientRecord(token)!;
+    const currentRecord = (await getPatientRecord(token))!;
     const socratesResponse = await generateSocratesFollowUp(
       currentRecord.messages,
       currentRecord.patientInfo.name
@@ -42,17 +42,17 @@ export async function POST(req: NextRequest) {
       socratesDimension: socratesResponse.socratesDimension,
       isRedFlag: socratesResponse.redFlagDetected,
     };
-    addMessageToRecord(token, assistantMsg);
+    await addMessageToRecord(token, assistantMsg);
 
     // 4. Update session completion / red flag status
-    updatePatientRecord(token, (rec) => ({
+    await updatePatientRecord(token, (rec) => ({
       ...rec,
       interviewCompleted: socratesResponse.isComplete,
       redFlagDetected: rec.redFlagDetected || socratesResponse.redFlagDetected,
       redFlagReason: socratesResponse.redFlagReason || rec.redFlagReason,
     }));
 
-    const updatedRecord = getPatientRecord(token)!;
+    const updatedRecord = (await getPatientRecord(token))!;
 
     return NextResponse.json({
       success: true,

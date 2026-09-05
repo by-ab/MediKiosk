@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Token is required' }, { status: 400 });
     }
 
-    const record = getPatientRecord(token);
+    const record = await getPatientRecord(token);
     if (!record) {
       return NextResponse.json({ error: 'Patient record not found for token: ' + token }, { status: 404 });
     }
@@ -45,8 +45,8 @@ export async function POST(req: NextRequest) {
       uploadedAt: new Date().toISOString(),
     };
 
-    addDocumentToRecord(token, newDoc);
-    const updatedRecord = getPatientRecord(token)!;
+    await addDocumentToRecord(token, newDoc);
+    const updatedRecord = (await getPatientRecord(token))!;
 
     return NextResponse.json({
       success: true,

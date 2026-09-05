@@ -4,7 +4,7 @@ import { IntakeStatus } from '@/lib/types';
 
 export async function GET() {
   try {
-    const queue = listQueue();
+    const queue = await listQueue();
     return NextResponse.json({
       success: true,
       count: queue.length,
@@ -25,7 +25,7 @@ export async function PATCH(req: NextRequest) {
       return NextResponse.json({ error: 'Token and status are required' }, { status: 400 });
     }
 
-    const updated = updateStatus(token, status);
+    const updated = await updateStatus(token, status);
     if (!updated) {
       return NextResponse.json({ error: 'Patient token not found: ' + token }, { status: 404 });
     }

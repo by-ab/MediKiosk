@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Token is required' }, { status: 400 });
     }
 
-    const record = getPatientRecord(token);
+    const record = await getPatientRecord(token);
     if (!record) {
       return NextResponse.json({ error: 'Patient session not found for token: ' + token }, { status: 404 });
     }
@@ -23,8 +23,8 @@ export async function POST(req: NextRequest) {
       record.patientInfo.name
     );
 
-    setRecordSummary(token, summary);
-    const updatedRecord = getPatientRecord(token)!;
+    await setRecordSummary(token, summary);
+    const updatedRecord = (await getPatientRecord(token))!;
 
     return NextResponse.json({
       success: true,

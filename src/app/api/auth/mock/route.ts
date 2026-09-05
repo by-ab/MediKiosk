@@ -76,7 +76,7 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    const record = createPatientRecord({
+    const record = await createPatientRecord({
       patientInfo: {
         name: patientName,
         phone: patientPhone,

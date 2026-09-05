@@ -13,7 +13,7 @@ export async function GET(
       return NextResponse.json({ error: 'Token parameter is required' }, { status: 400 });
     }
 
-    const record = getPatientRecord(token);
+    const record = await getPatientRecord(token);
     if (!record) {
       return NextResponse.json({ error: 'Patient record not found for token: ' + token }, { status: 404 });
     }
@@ -41,7 +41,7 @@ export async function PATCH(
       return NextResponse.json({ error: 'Token and summary are required' }, { status: 400 });
     }
 
-    const updated = setRecordSummary(token, summary);
+    const updated = await setRecordSummary(token, summary);
     if (!updated) {
       return NextResponse.json({ error: 'Patient record not found for token: ' + token }, { status: 404 });
     }
@@ -55,4 +55,3 @@ export async function PATCH(
     return NextResponse.json({ error: errorMsg }, { status: 500 });
   }
 }
-
