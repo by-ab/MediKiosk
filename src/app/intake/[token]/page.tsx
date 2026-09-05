@@ -173,7 +173,7 @@ export default function PatientIntakePage() {
 
       {/* Footer */}
       <footer className="max-w-4xl w-full mx-auto text-center text-xs text-slate-400 py-4">
-        MediKiosk Token #{record.tokenNumber} • Patient: {record.patientInfo.name}
+        ABHA authentication and OTP verification are pending live government API credentials. Your intake session will be created normally.
       </footer>
     </div>
   );

@@ -14,7 +14,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 export const metadata: Metadata = {
   title: 'MediKiosk | AI-Powered Patient Intake & Triage',
-  description: 'Intelligent hospital intake kiosk with simulated ABHA authentication, SOCRATES symptom inquiry, prescription handwriting verification, and doctor EMR integration.',
+  description: 'Intelligent hospital intake kiosk with ABHA authentication, structured symptom inquiry, prescription document digitisation, and direct physician EMR integration.',
 };
 
 export default function RootLayout({

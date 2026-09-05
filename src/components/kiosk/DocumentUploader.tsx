@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   AlertTriangle,
   Loader2,
-  Sparkles,
   ArrowRight,
   ShieldAlert,
   Calendar,
@@ -16,7 +15,6 @@ import {
   Plus
 } from 'lucide-react';
 import { DigitizedDocument } from '@/lib/types';
-import { SAMPLE_DOC_PRESETS, SampleDocPreset } from '@/lib/sampleDocs';
 
 interface DocumentUploaderProps {
   token: string;
@@ -27,41 +25,8 @@ interface DocumentUploaderProps {
 export function DocumentUploader({ token, existingDocs = [], onComplete }: DocumentUploaderProps) {
   const [documents, setDocuments] = useState<DigitizedDocument[]>(existingDocs);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedPreset, setSelectedPreset] = useState<SampleDocPreset | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
-  // Handle preset sample selection
-  const handleSelectPreset = async (preset: SampleDocPreset) => {
-    setSelectedPreset(preset);
-    setPreviewImage(preset.svgDataUrl);
-    setErrorMessage(null);
-    setIsProcessing(true);
-
-    try {
-      const res = await fetch('/api/digitize', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token,
-          presetId: preset.id,
-          filename: `${preset.name}.jpg`,
-        }),
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || 'Failed to digitize preset document');
-      }
-
-      setDocuments((prev) => [...prev, data.document]);
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : 'Error processing document';
-      setErrorMessage(msg);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
 
   // Handle custom file upload
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,61 +87,13 @@ export function DocumentUploader({ token, existingDocs = [], onComplete }: Docum
             <div>
               <h2 className="text-base font-bold text-slate-900">Upload Prescriptions &amp; Reports</h2>
               <p className="text-xs text-slate-500 mt-0.5">
-                Gemini Vision OCR with specialized handwriting confidence assessment
+                Optical document processing with handwriting verification
               </p>
             </div>
           </div>
           <span className="text-[11px] font-bold bg-slate-100 text-slate-600 px-2.5 py-1 rounded-full font-mono">
             {documents.length} Uploaded
           </span>
-        </div>
-      </div>
-
-      {/* Sample Clinical Documents */}
-      <div className="bg-slate-900 text-white rounded-2xl p-5 shadow-sm border border-slate-800">
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center space-x-2">
-            <Sparkles className="w-4 h-4 text-teal-400" />
-            <h3 className="text-sm font-bold text-slate-100">Sample Clinical Documents</h3>
-          </div>
-          <span className="text-[10px] bg-slate-800 text-slate-300 font-mono px-2 py-0.5 rounded">
-            Click to load sample
-          </span>
-        </div>
-
-        <p className="text-xs text-slate-300 mb-4">
-          Select a sample document to test optical analysis across printed laboratory reports and handwritten prescriptions:
-        </p>
-
-        <div className="grid sm:grid-cols-2 gap-3">
-          {SAMPLE_DOC_PRESETS.map((preset) => {
-            const isHandwritten = preset.category === 'handwritten';
-            return (
-              <button
-                key={preset.id}
-                type="button"
-                onClick={() => handleSelectPreset(preset)}
-                disabled={isProcessing}
-                className="text-left p-3.5 rounded-xl bg-slate-800/90 hover:bg-slate-750 border border-slate-700 hover:border-teal-500/50 transition-all group disabled:opacity-50"
-              >
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="font-semibold text-xs text-slate-100 group-hover:text-teal-300">
-                    {preset.name}
-                  </span>
-                  <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
-                      isHandwritten
-                        ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
-                        : 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40'
-                    }`}
-                  >
-                    {preset.previewBadge}
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-400 leading-normal">{preset.description}</p>
-              </button>
-            );
-          })}
         </div>
       </div>
 

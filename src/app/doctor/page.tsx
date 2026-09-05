@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   Edit3,
   Send,
-  Sparkles,
   Search,
   RefreshCw,
   ExternalLink,
@@ -65,7 +64,7 @@ export default function DoctorConsolePage() {
     setIsLoadingRecord(true);
     setIsEditing(false);
     setActionNotice({
-      message: `🔔 Calling Token ${token}... Auto-fetching pre-consultation intake summary.`,
+      message: `Calling Token ${token}... Auto-fetching pre-consultation intake summary.`,
       type: 'info',
     });
 
@@ -98,7 +97,7 @@ export default function DoctorConsolePage() {
     if (!selectedRecord) return;
 
     setActionNotice({
-      message: `✅ Summary for Token ${selectedRecord.token} (#${selectedRecord.tokenNumber} - ${selectedRecord.patientInfo.name}) confirmed and filed into Hospital EMR!`,
+      message: `Summary for Token ${selectedRecord.token} (#${selectedRecord.tokenNumber} - ${selectedRecord.patientInfo.name}) confirmed and filed into Hospital EMR.`,
       type: 'success',
     });
 
@@ -125,7 +124,7 @@ export default function DoctorConsolePage() {
     });
     setIsEditing(false);
     setActionNotice({
-      message: `✏️ Physician edits saved to local intake draft.`,
+      message: `Physician edits saved to local intake draft.`,
       type: 'success',
     });
   };
@@ -140,10 +139,10 @@ export default function DoctorConsolePage() {
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans">
       {/* EMR Dark Header */}
-      <header className="bg-slate-900 border-b border-slate-800 px-6 py-3.5 sticky top-0 z-30 shadow-md">
+      <header className="bg-slate-900 border-b border-slate-800 px-6 py-3.5 sticky top-0 z-30 shadow-xs">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-lg bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-teal-500/20 text-teal-400 border border-teal-500/30 flex items-center justify-center">
               <Stethoscope className="w-5 h-5" />
             </div>
             <div>
@@ -152,10 +151,12 @@ export default function DoctorConsolePage() {
                   Hospital EMR — Physician Station
                 </span>
                 <span className="text-[10px] bg-teal-950 text-teal-300 font-mono font-bold px-2 py-0.5 rounded border border-teal-800">
-                  TOKEN AUTO-FETCH ENABLED
+                  AUTO-FETCH ENABLED
                 </span>
               </div>
-              <p className="text-xs text-slate-400">Dr. Ananya Sen, MD | OPD Station #3</p>
+              <p className="text-xs text-slate-400">
+                Dr. Ananya Sen, MD | OPD Station #3 • <span className="text-slate-400 text-[11px]">EMR login is managed by the hospital&apos;s identity provider — credentials pending integration.</span>
+              </p>
             </div>
           </div>
 
@@ -182,7 +183,7 @@ export default function DoctorConsolePage() {
         </div>
       </header>
 
-      {/* Simulated Notification Toast Banner */}
+      {/* System Notification Banner */}
       {actionNotice && (
         <div
           className={`px-6 py-2.5 text-xs font-semibold flex items-center justify-between border-b ${
@@ -209,7 +210,7 @@ export default function DoctorConsolePage() {
       {/* Main Dual-Panel EMR Layout */}
       <main className="max-w-7xl w-full mx-auto p-4 sm:p-6 grid lg:grid-cols-12 gap-6 flex-1">
         {/* LEFT PANEL: Queue Management (4 cols) */}
-        <div className="lg:col-span-4 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col h-[780px] overflow-hidden shadow-lg">
+        <div className="lg:col-span-4 bg-slate-900 rounded-2xl border border-slate-800 flex flex-col h-[780px] overflow-hidden shadow-xs">
           {/* Queue Header & Search */}
           <div className="p-4 border-b border-slate-800 space-y-3">
             <div className="flex items-center justify-between">
@@ -256,7 +257,7 @@ export default function DoctorConsolePage() {
                     key={item.token}
                     className={`rounded-xl p-3.5 border transition-all ${
                       isSelected
-                        ? 'bg-slate-800/90 border-teal-500/80 shadow-md ring-1 ring-teal-500/40'
+                        ? 'bg-slate-800/90 border-teal-500 shadow-xs'
                         : 'bg-slate-950/60 border-slate-800/80 hover:bg-slate-800/40 hover:border-slate-700'
                     }`}
                   >
@@ -278,7 +279,7 @@ export default function DoctorConsolePage() {
                       {/* Status Badges */}
                       <div className="shrink-0 flex flex-col items-end gap-1">
                         {item.hasRedFlag && (
-                          <span className="bg-red-500/20 text-red-300 border border-red-500/40 text-[9px] font-black uppercase px-1.5 py-0.2 rounded animate-pulse">
+                          <span className="bg-red-500/20 text-red-300 border border-red-500/40 text-[9px] font-bold uppercase px-1.5 py-0.2 rounded">
                             Red Flag
                           </span>
                         )}
@@ -317,7 +318,15 @@ export default function DoctorConsolePage() {
                         }`}
                       >
                         <Bell className="w-3 h-3" />
-                        <span>{isSelected ? 'Viewing' : 'Call'}</span>
+                        <span>
+                          {isSelected
+                            ? 'Viewing'
+                            : item.status === 'in_consultation'
+                            ? 'Resume'
+                            : item.status === 'completed'
+                            ? 'View'
+                            : 'Call'}
+                        </span>
                       </button>
                     </div>
                   </div>
@@ -395,7 +404,7 @@ export default function DoctorConsolePage() {
                 {/* Red Flag Warning Alert */}
                 {selectedRecord.redFlagDetected && (
                   <div className="bg-red-950/60 border border-red-500/60 rounded-2xl p-4 flex items-start space-x-3 text-red-200 text-xs">
-                    <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5 animate-bounce" />
+                    <AlertTriangle className="w-5 h-5 text-red-400 shrink-0 mt-0.5" />
                     <div>
                       <span className="font-bold uppercase text-red-300 tracking-wider">
                         Immediate Triage Alert:{' '}
@@ -407,7 +416,7 @@ export default function DoctorConsolePage() {
 
                 {/* PROMINENT LOW CONFIDENCE HANDWRITING WARNING */}
                 {selectedRecord.documents.some((d) => d.confidenceAssessment === 'low' || d.flaggedForVerification) && (
-                  <div className="bg-amber-950/60 border-2 border-amber-500/70 rounded-2xl p-4 space-y-2 text-amber-200 text-xs shadow-md">
+                  <div className="bg-amber-950/60 border border-amber-500/70 rounded-2xl p-4 space-y-2 text-amber-200 text-xs">
                     <div className="flex items-center space-x-2 text-amber-300 font-bold text-sm">
                       <ShieldAlert className="w-5 h-5 text-amber-400" />
                       <span>Physician Action Required: Low Confidence Document Extraction</span>

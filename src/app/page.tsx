@@ -7,7 +7,6 @@ import {
   ShieldCheck,
   UserPlus,
   ArrowRight,
-  Sparkles,
   CheckCircle2,
   Loader2,
   AlertCircle
@@ -154,10 +153,9 @@ export default function LoginPage() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             {/* Header / Banner */}
             <div className="bg-slate-900 text-white p-6 sm:p-7 border-b border-slate-800">
-              <div className="inline-flex items-center space-x-1.5 bg-teal-950/80 border border-teal-700/50 px-2.5 py-0.5 rounded text-teal-300 text-xs font-medium mb-2.5">
-                <Sparkles className="w-3.5 h-3.5" />
-                <span>Patient Check-In</span>
-              </div>
+              <span className="inline-block bg-teal-950 text-teal-300 border border-teal-800 text-[11px] font-semibold px-2.5 py-0.5 rounded mb-2.5">
+                Patient Check-In
+              </span>
               <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-white">Welcome to MediKiosk</h1>
               <p className="text-slate-400 text-xs sm:text-sm mt-1">
                 Please enter your details to generate your queue token and begin symptom intake.
@@ -341,7 +339,7 @@ export default function LoginPage() {
 
       {/* Footer */}
       <footer className="max-w-xl w-full mx-auto text-center text-xs text-slate-400 py-3">
-        MediKiosk • Intelligent Patient Intake &amp; Clinical Triage
+        ABHA authentication and OTP verification are pending live government API credentials. Your intake session will be created normally.
       </footer>
     </div>
   );

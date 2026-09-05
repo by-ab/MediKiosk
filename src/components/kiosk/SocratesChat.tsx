@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, AlertTriangle, CheckCircle2, Bot, User, Sparkles, ArrowRight, Loader2 } from 'lucide-react';
+import { Send, AlertTriangle, CheckCircle2, Bot, User, ArrowRight, Loader2 } from 'lucide-react';
 import { ChatMessage } from '@/lib/types';
 
 interface SocratesChatProps {
@@ -130,15 +130,12 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
       {/* Chat Top Banner */}
       <div className="bg-slate-900 text-white px-5 py-3.5 flex items-center justify-between border-b border-slate-800">
         <div className="flex items-center space-x-2.5">
-          <div className="w-8 h-8 rounded-lg bg-teal-500/20 text-teal-400 flex items-center justify-center border border-teal-500/30">
-            <Sparkles className="w-4 h-4" />
+          <div className="w-8 h-8 rounded-lg bg-teal-600 text-white flex items-center justify-center">
+            <Bot className="w-4 h-4" />
           </div>
           <div>
-            <h2 className="text-sm font-semibold text-slate-100 flex items-center space-x-1.5">
-              <span>Symptom Intake Assessment</span>
-              <span className="text-[10px] bg-teal-950 text-teal-300 font-mono px-1.5 py-0.5 rounded border border-teal-800">
-                SOCRATES AI
-              </span>
+            <h2 className="text-sm font-semibold text-slate-100">
+              Symptom Intake Assessment
             </h2>
             <p className="text-xs text-slate-400">Structured pre-consultation clinical inquiry</p>
           </div>
