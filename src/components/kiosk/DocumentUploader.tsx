@@ -263,7 +263,7 @@ export function DocumentUploader({ token, existingDocs = [], onComplete }: Docum
         <button
           type="button"
           onClick={onComplete}
-          className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2"
+          className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs sm:text-sm px-5 py-2.5 min-h-[44px] rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2 cursor-pointer"
         >
           <span>Generate Clinical Summary</span>
           <ArrowRight className="w-4 h-4" />

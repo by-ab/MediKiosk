@@ -170,7 +170,7 @@ export default function LoginPage() {
                   setActiveTab('abha');
                   setError(null);
                 }}
-                className={`flex-1 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center justify-center space-x-2 ${
+                className={`flex-1 py-2.5 px-3 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                   activeTab === 'abha'
                     ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
@@ -186,7 +186,7 @@ export default function LoginPage() {
                   setActiveTab('register');
                   setError(null);
                 }}
-                className={`flex-1 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-semibold transition-all flex items-center justify-center space-x-2 ${
+                className={`flex-1 py-2.5 px-3 min-h-[44px] rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center justify-center space-x-2 cursor-pointer ${
                   activeTab === 'register'
                     ? 'bg-white text-slate-900 shadow-xs border border-slate-200'
                     : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
@@ -198,7 +198,7 @@ export default function LoginPage() {
             </div>
 
             {/* Form Body */}
-            <div className="p-6 sm:p-7 space-y-5">
+            <div className="p-5 sm:p-7 space-y-5">
               {error && (
                 <div className="bg-red-50 border border-red-200 text-red-900 p-3.5 rounded-xl text-xs flex items-center space-x-2">
                   <AlertCircle className="w-4 h-4 text-red-600 shrink-0" />
@@ -219,7 +219,7 @@ export default function LoginPage() {
                         onChange={(e) => setAbhaName(e.target.value)}
                         placeholder="e.g. Ramesh Verma"
                         required
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm text-slate-900 transition-colors"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors"
                       />
                     </div>
 
@@ -234,7 +234,7 @@ export default function LoginPage() {
                         placeholder="14-XXXX-XXXX-XXXX"
                         maxLength={17}
                         required
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm font-mono text-slate-900 transition-colors tracking-wide"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm font-mono text-slate-900 transition-colors tracking-wide"
                       />
                     </div>
 
@@ -249,7 +249,7 @@ export default function LoginPage() {
                         placeholder="Enter 6-digit OTP (e.g. 123456)"
                         maxLength={6}
                         required
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm font-mono text-slate-900 tracking-wider transition-colors"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm font-mono text-slate-900 tracking-wider transition-colors"
                       />
                     </div>
                   </>
@@ -265,7 +265,7 @@ export default function LoginPage() {
                         onChange={(e) => setName(e.target.value)}
                         placeholder="e.g. Aarav Patel"
                         required
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm text-slate-900 transition-colors"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors"
                       />
                     </div>
 
@@ -279,11 +279,11 @@ export default function LoginPage() {
                         onChange={(e) => setPhone(e.target.value)}
                         placeholder="+91 98765 43210"
                         required
-                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm text-slate-900 transition-colors"
+                        className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors"
                       />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-1.5">
                           Age
@@ -293,7 +293,7 @@ export default function LoginPage() {
                           value={age}
                           onChange={(e) => setAge(e.target.value)}
                           placeholder="e.g. 34"
-                          className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm text-slate-900 transition-colors"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors"
                         />
                       </div>
                       <div>
@@ -303,7 +303,7 @@ export default function LoginPage() {
                         <select
                           value={gender}
                           onChange={(e) => setGender(e.target.value)}
-                          className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 text-sm text-slate-900 transition-colors"
+                          className="w-full bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-3.5 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors"
                         >
                           <option value="Female">Female</option>
                           <option value="Male">Male</option>
@@ -317,7 +317,7 @@ export default function LoginPage() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white font-semibold py-3 px-5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2 text-sm mt-6"
+                  className="w-full bg-teal-600 hover:bg-teal-700 disabled:bg-slate-300 text-white font-semibold min-h-[44px] py-3.5 px-5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-2 text-sm mt-6 cursor-pointer"
                 >
                   {isLoading ? (
                     <>

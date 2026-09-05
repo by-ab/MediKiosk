@@ -176,7 +176,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
                 <button
                   type="button"
                   onClick={onComplete}
-                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center space-x-1.5 shadow-xs"
+                  className="bg-red-600 hover:bg-red-700 text-white text-xs font-semibold px-4 py-2.5 min-h-[44px] rounded-xl transition-colors flex items-center space-x-1.5 shadow-xs cursor-pointer"
                 >
                   <span>Proceed to Upload Documents &amp; Alert Doctor</span>
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -205,7 +205,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
               )}
 
               <div
-                className={`max-w-[85%] sm:max-w-[75%] rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed shadow-xs ${
+                className={`max-w-[88%] sm:max-w-[75%] rounded-2xl p-3.5 sm:p-4 text-sm leading-relaxed shadow-xs break-words ${
                   isAssistant
                     ? isAlert
                       ? 'bg-red-50 border border-red-200 text-red-950 rounded-tl-xs font-medium'
@@ -266,7 +266,7 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
           <button
             type="button"
             onClick={onComplete}
-            className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-5 py-2.5 rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 shrink-0"
+            className="w-full sm:w-auto bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-5 py-2.5 min-h-[44px] rounded-xl transition-all shadow-xs flex items-center justify-center space-x-1.5 shrink-0 cursor-pointer"
           >
             <span>Next: Upload Documents</span>
             <ArrowRight className="w-4 h-4" />
@@ -286,13 +286,13 @@ export function SocratesChat({ token, patientName, initialMessages = [], onCompl
               onKeyDown={handleKeyDown}
               disabled={isLoading}
               placeholder="Describe your symptoms in your own words..."
-              className="flex-1 bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-4 py-2.5 text-sm text-slate-900 transition-colors disabled:bg-slate-100"
+              className="flex-1 bg-slate-50 border border-slate-300 focus:border-teal-500 focus:bg-white focus:outline-hidden rounded-xl px-4 py-2.5 min-h-[44px] text-sm text-slate-900 transition-colors disabled:bg-slate-100"
             />
             <button
               type="button"
               onClick={() => handleSendMessage()}
               disabled={!input.trim() || isLoading}
-              className="bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 text-white p-2.5 rounded-xl transition-colors shrink-0 shadow-xs flex items-center justify-center"
+              className="bg-teal-600 hover:bg-teal-700 disabled:bg-slate-200 disabled:text-slate-400 text-white min-h-[44px] min-w-[44px] p-2.5 rounded-xl transition-colors shrink-0 shadow-xs flex items-center justify-center cursor-pointer"
             >
               <Send className="w-4 h-4" />
             </button>

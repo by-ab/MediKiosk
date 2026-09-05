@@ -71,7 +71,7 @@ export default function PatientIntakePage() {
           <button
             type="button"
             onClick={() => router.push('/')}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition-colors"
+            className="w-full bg-teal-600 hover:bg-teal-700 text-white font-bold min-h-[44px] py-2.5 px-4 rounded-xl text-xs transition-colors cursor-pointer"
           >
             Start New Check-In
           </button>
@@ -90,13 +90,13 @@ export default function PatientIntakePage() {
       />
 
       {/* Main Content Area */}
-      <main className="max-w-4xl w-full mx-auto p-4 sm:p-6 lg:p-8 flex-1 flex flex-col justify-center">
+      <main className="max-w-4xl w-full mx-auto p-3 sm:p-6 lg:p-8 flex-1 flex flex-col justify-center">
         {/* Step Navigation Pill Bar */}
-        <div className="bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs mb-6 flex items-center gap-1">
+        <div className="bg-white p-1.5 rounded-2xl border border-slate-200 shadow-xs mb-4 sm:mb-6 flex flex-col sm:flex-row items-stretch gap-1.5">
           <button
             type="button"
             onClick={() => setCurrentStep(1)}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+            className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               currentStep === 1
                 ? 'bg-teal-600 text-white shadow-xs'
                 : 'text-slate-600 hover:bg-slate-100'
@@ -109,7 +109,7 @@ export default function PatientIntakePage() {
           <button
             type="button"
             onClick={() => setCurrentStep(2)}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+            className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               currentStep === 2
                 ? 'bg-teal-600 text-white shadow-xs'
                 : 'text-slate-600 hover:bg-slate-100'
@@ -127,7 +127,7 @@ export default function PatientIntakePage() {
           <button
             type="button"
             onClick={() => setCurrentStep(3)}
-            className={`flex-1 py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 ${
+            className={`flex-1 min-h-[44px] py-2.5 px-3 rounded-xl text-xs font-bold transition-all flex items-center justify-center space-x-1.5 cursor-pointer ${
               currentStep === 3
                 ? 'bg-teal-600 text-white shadow-xs'
                 : 'text-slate-600 hover:bg-slate-100'
@@ -141,7 +141,7 @@ export default function PatientIntakePage() {
         {/* Dynamic Screen View */}
         <div className="flex-1">
           {currentStep === 1 && (
-            <div className="h-[600px]">
+            <div className="h-[520px] sm:h-[600px]">
               <SocratesChat
                 token={record.token}
                 patientName={record.patientInfo.name}

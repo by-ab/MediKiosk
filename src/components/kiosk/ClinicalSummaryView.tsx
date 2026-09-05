@@ -91,7 +91,7 @@ export function ClinicalSummaryView({
           </div>
 
           {/* Big Token Badge */}
-          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 sm:p-5 text-center min-w-[140px]">
+          <div className="bg-slate-950 border border-slate-800 rounded-xl p-4 sm:p-5 text-center w-full sm:w-auto min-w-[140px]">
             <span className="text-[10px] uppercase font-bold tracking-wider text-slate-400 block">
               Queue Token
             </span>
@@ -161,7 +161,7 @@ export function ClinicalSummaryView({
             <button
               type="button"
               onClick={handlePrint}
-              className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 px-3 py-1.5 rounded-lg transition-colors print:hidden"
+              className="text-xs font-semibold text-slate-600 hover:text-slate-900 flex items-center space-x-1.5 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 min-h-[40px] rounded-xl transition-colors print:hidden cursor-pointer"
             >
               <Printer className="w-3.5 h-3.5" />
               <span>Print Summary</span>
@@ -241,7 +241,7 @@ export function ClinicalSummaryView({
 
         <Link
           href="/"
-          className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold px-4 py-2.5 rounded-lg transition-colors text-center flex items-center justify-center space-x-1.5"
+          className="w-full sm:w-auto bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold px-4 py-2.5 min-h-[44px] rounded-xl transition-colors text-center flex items-center justify-center space-x-1.5"
         >
           <RotateCcw className="w-3.5 h-3.5 text-slate-500" />
           <span>New Check-In</span>
