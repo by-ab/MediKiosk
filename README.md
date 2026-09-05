@@ -1,63 +1,45 @@
 # MediKiosk
-> **Independent project, not affiliated with the Government of India, ABDM, or the Ministry of AYUSH.** This is a personal/academic technical demonstration exploring how such a system could integrate with India's existing digital health infrastructure — it is not an official product, and none of the government systems referenced (ABHA, ABDM, DPDP compliance) are actually connected; see "What's Simulated" below.
 
-An intelligent outpatient intake and clinical triage system that streamlines patient registration, conducts structured symptom interviews using the clinical SOCRATES framework, digitizes medical records with handwriting confidence scoring, and automatically feeds synthesized summaries into a physician's EMR console.
+> Independent personal project — not affiliated with the Government of India, ABDM, or the Ministry of AYUSH. This is a technical demo exploring how a system like this could plug into India's digital health infrastructure. None of the actual government systems (ABHA, ABDM, DPDP compliance) are really connected — see the "What's Simulated" section below for the honest breakdown.
 
----
+MediKiosk is a patient intake system built around one idea: by the time a patient sits down in front of a doctor, most of their history should already be captured. Instead of a doctor spending their first few minutes asking the same questions every visit, the patient works through an adaptive AI interview and uploads any prior prescriptions or reports beforehand — and a structured summary is waiting on the doctor's screen the moment they're called in.
 
-## Overview
+There are two sides to it:
 
-**MediKiosk** connects the waiting room to the consultation desk through two integrated interfaces:
+- **Patient Kiosk** (`/`) — where patients check in with an ABHA ID (or register as a walk-in), get a queue token, go through a guided symptom interview, and upload documents.
+- **Doctor Console** (`/doctor`) — where a physician pulls up whichever patient's been called, reads the auto-generated summary, flags anything that needs a closer look, and confirms it into the record.
 
-- **Patient Kiosk (`/`)**: A touch-friendly terminal where patients check in (via ABHA ID or walk-in registration), receive a queue token, undergo an adaptive structured symptom interview, and upload prescriptions/reports.
-- **Doctor EMR Console (`/doctor`)**: A physician workstation where doctors select patients from the live queue, review auto-fetched clinical intake summaries, verify low-confidence handwritten extractions, edit notes, and confirm & file records to the EMR.
+## How a visit actually flows
 
----
+1. **Check-in** — patient enters their ABHA ID (or fills a short walk-in form) and gets a token, like `#TK-21`.
+2. **The interview** — an AI-guided chat walks through the SOCRATES framework (site, onset, character, radiation, associations, timing, severity), and immediately flags anything that looks urgent.
+3. **Uploading documents** — prior prescriptions or lab reports get scanned with Gemini's vision model, which pulls out medications and diagnoses. If the handwriting's too messy to read confidently, it says so instead of guessing.
+4. **Summary generation** — everything from the interview and the documents gets pulled into one clinical summary (chief complaint, history, allergies, family history, and so on), ready for the doctor to review.
+5. **Doctor review** — the physician opens the patient's card, checks anything flagged, edits if needed, and files it.
 
-## 5-Step User Flow
+## What's real and what's simulated
 
-1. **Check-In & Token Assignment**: Patient registers via 14-digit ABHA ID or walk-in form, receiving an assigned queue token (e.g., `#TK-21`).
-2. **Adaptive SOCRATES Chat**: An intake assistant conducts a 6-turn structured symptom inquiry (Site, Onset, Character, Radiation, Associations, Timing, Exacerbation, Severity) with real-time emergency red-flag detection.
-3. **Document Digitization**: Patients upload prior prescriptions or lab reports. Gemini Vision extracts medications and diagnoses while scoring handwriting legibility (flagging ambiguous cursive for physician verification).
-4. **Clinical Summary Synthesis**: An automated 6-part clinical intake summary (Chief Complaint, HPI, Past History, Allergies, Family History, ROS) is generated as an editable draft.
-5. **Doctor EMR Review & Filing**: The physician opens the patient's card on the doctor console, reviews alerts, makes any needed edits, and clicks "Confirm & File".
+Being upfront about this, since a couple of things here are genuinely working and a couple are stand-ins for systems that don't exist at demo scale yet:
 
----
+- **ABHA login** is simulated — it'll accept any properly-formatted 14-digit ID and 6-digit OTP. A real integration would need onboarding through ABDM's actual sandbox, which isn't something available outside an institutional setting.
+- **Doctor console login** doesn't exist here on purpose — in an actual hospital, this would sit behind whatever authentication their EMR already uses. Not something this project needs to rebuild.
+- **Data storage** is in-memory, so it resets if the server restarts. A real version would need an actual database.
+- **"Confirm & File"** just updates local state right now — a production version would send this to the hospital's system as a proper FHIR record.
+- **Document OCR is real** — the Gemini vision calls and the confidence scoring on handwriting are fully functional, not mocked.
 
-## What's Simulated in This Demo
+## Built with
 
-- **ABHA OTP Verification (Simulated)**: Accepts any 14-digit format and 6-digit OTP. Production requires institutional ABDM sandbox gateway onboarding.
-- **Doctor Station Authentication (Simulated)**: Open workstation view. In production, this sits behind the hospital's existing SSO/LDAP/Active Directory.
-- **Data Storage (In-Memory)**: Sessions and queue state are held in memory for demo agility. Production would use PostgreSQL/Prisma with audit logging.
-- **"Confirm & File" (Simulated Export)**: Updates internal state. Production would dispatch HL7 FHIR `Composition` bundles to the hospital HIS/EMR.
-- **Document Digitization & Vision OCR (REAL)**: Multimodal Gemini Vision extraction and handwriting confidence assessment are fully functional.
+Next.js (App Router) with TypeScript and Tailwind, Google's Gemini API for both the conversational interview and the document OCR (it tries a few model versions in order in case one's unavailable), and an in-memory store standing in for a real database.
 
----
-
-## Tech Stack
-
-- **Framework**: Next.js 16 (App Router, Server Actions, Route Handlers)
-- **UI & Styling**: React, Tailwind CSS, Lucide Icons
-- **Language**: TypeScript
-- **AI Models**: Google Gemini (auto-fallback across `gemini-3.6-flash` / `gemini-flash-latest` / `gemini-3.7-flash`) via `@google/generative-ai`
-- **State**: In-memory repository with Next.js global state persistence
-
----
-
-## Project Structure
+## Project layout
 
 ```
-medikiosk/
-├── src/app/          # Next.js pages (Kiosk, Intake wizard, Doctor console) & API route handlers
-├── src/components/   # Reusable UI & Kiosk feature components (Chat, Uploader, Summary, Header)
-└── src/lib/          # Gemini AI client prompts, in-memory store repository, and TypeScript types
+src/app/          — pages and API routes (kiosk, intake flow, doctor console)
+src/components/   — the UI pieces (chat, uploader, summary view, header)
+src/lib/          — Gemini prompts, the in-memory store, and shared types
 ```
 
----
-
-## Getting Started
-
-### 1. Installation
+## Running it locally
 
 ```bash
 git clone https://github.com/by-ab/medikiosk.git
@@ -65,24 +47,18 @@ cd medikiosk
 npm install
 ```
 
-### 2. Configuration
-
-Create `.env.local` in the root directory:
-
-```env
-GEMINI_API_KEY=your_gemini_api_key_here
+Add a `.env.local` file with your own key:
 ```
+GEMINI_API_KEY=your_key_here
+```
+(If you skip this, the app still runs — it just falls back to a simpler built-in question flow instead of calling Gemini.)
 
-*(Note: If `GEMINI_API_KEY` is omitted, the app automatically runs on built-in offline clinical fallbacks.)*
-
-### 3. Run Locally
-
+Then:
 ```bash
 npm run dev
 ```
 
-- **Patient Portal**: [http://localhost:3000](http://localhost:3000)
-- **Doctor Console**: [http://localhost:3000/doctor](http://localhost:3000/doctor)
+Patient side is at `localhost:3000`, doctor console at `localhost:3000/doctor`. 
 
 To create a production build:
 
