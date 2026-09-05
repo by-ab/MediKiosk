@@ -38,7 +38,7 @@ An intelligent outpatient intake and clinical triage system that streamlines pat
 - **Framework**: Next.js 16 (App Router, Server Actions, Route Handlers)
 - **UI & Styling**: React, Tailwind CSS, Lucide Icons
 - **Language**: TypeScript
-- **AI Models**: Google Gemini 1.5 Flash via `@google/generative-ai`
+- **AI Models**: Google Gemini (auto-fallback across `gemini-3.6-flash` / `gemini-flash-latest` / `gemini-3.7-flash`) via `@google/generative-ai`
 - **State**: In-memory repository with Next.js global state persistence
 
 ---
