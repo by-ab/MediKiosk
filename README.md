@@ -23,13 +23,13 @@ Being upfront about this, since a couple of things here are genuinely working an
 
 - **ABHA login** is simulated — it'll accept any properly-formatted 14-digit ID and 6-digit OTP. A real integration would need onboarding through ABDM's actual sandbox, which isn't something available outside an institutional setting.
 - **Doctor console login** doesn't exist here on purpose — in an actual hospital, this would sit behind whatever authentication their EMR already uses. Not something this project needs to rebuild.
-- **Data storage** is in-memory, so it resets if the server restarts. A real version would need an actual database.
+- **Data Storage** Persisted via Upstash Redis (through Vercel's storage integration) — session and queue data survives across requests and serverless instances, not just kept in memory.
 - **"Confirm & File"** just updates local state right now — a production version would send this to the hospital's system as a proper FHIR record.
 - **Document OCR is real** — the Gemini vision calls and the confidence scoring on handwriting are fully functional, not mocked.
 
 ## Built with
 
-Next.js (App Router) with TypeScript and Tailwind, Google's Gemini API for both the conversational interview and the document OCR (it tries a few model versions in order in case one's unavailable), and an in-memory store standing in for a real database.
+Next.js (App Router) with TypeScript and Tailwind, Google's Gemini API for both the conversational interview and the document OCR (it tries a few model versions in order in case one's unavailable), and Upstash Redis for persistent storage.
 
 ## Project layout
 
